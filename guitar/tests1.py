@@ -1,10 +1,12 @@
+# first lot of tests 
+
 import os
 import importlib
 from django.urls import reverse
 from django.test import TestCase
 from django.conf import settings
 
-FAILURE_HEADER = f"{os.linesep}{os.linesep}{os.linesep}================{os.linesep}TwD TEST FAILURE =({os.linesep}================{os.linesep}"
+FAILURE_HEADER = f"{os.linesep}{os.linesep}{os.linesep}================{os.linesep}TEST FAILURE =({os.linesep}================{os.linesep}"
 FAILURE_FOOTER = f"{os.linesep}"
 
 

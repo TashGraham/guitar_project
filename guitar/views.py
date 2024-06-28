@@ -8,3 +8,6 @@ def index(request):
 def about(request):
     # about page contains link back to index
     return HttpResponse("This is the about page. To return to index page please click <a href='/guitar/'>here</a>")
+
+
+## ON PAGE 56 ###################
