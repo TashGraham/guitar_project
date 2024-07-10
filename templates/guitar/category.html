@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+
+<html>
+
+    <title>
+        {% if category %}
+            {{ category.name }}
+        {% else %}
+            Unknown Category
+        {% endif %}
+    </title>
+
+    <body>
+        {% if category %}
+        <h1>{{ category.name }}</h1>
+        {% if parts %}
+        <ul>
+            {% for part in parts %}
+            <li>{{ part.name }}</li>
+            {% endfor %}
+        </ul>
+        {% else %}
+        <strong>No pages currently in category.</strong>
+        {% endif %}
+        {% else %}
+        The specified category does not exist.
+        {% endif %}
+    </body>
+
+</html>

@@ -12,6 +12,9 @@
         {% if categories %}
             <ul>
             {% for category in categories %}
+                <a href="{% url 'guitar:show_category' category.slug %}">
+                    {{ category.name }}
+                </a>
                 <strong>Parts in {{ category.name }}:</strong>
                 {% for part in parts %}
                     {% if part.category == category %}
