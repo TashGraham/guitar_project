@@ -134,14 +134,16 @@ def populate():
     for cat, cat_data in cats.items():
         c = add_cat(cat, views=cat_data['views'])
         for p in cat_data['parts']:
-            add_part(c, p['name'], p['url'], views=p['views'], likes=['likes'], sustain=p['sustain'], warmth=p['warmth'], weight=p['weight'])
+            add_part(p['name'], c, p['url'], views=p['views'], likes=p['likes'], sustain=p['sustain'], warmth=p['warmth'], weight=p['weight'])
 
     for c in Category.objects.all():
         for p in Part.objects.filter(category=c):
             print(f'- {c}: {p}')
 
-def add_part(cat, name, url, views, likes, sustain, warmth, weight):
-    p = Part.objects.get_or_create(category=cat, name=name, views=views, likes=likes)[0]
+def add_part(name, cat, url, views, likes, sustain, warmth, weight):
+    p = Part.objects.get_or_create(name=name, category=cat)[0]
+    p.views = views
+    p.likes = likes
     p.url = url
     p.sustain = sustain
     p.warmth = warmth

@@ -78,12 +78,12 @@ class TestsTwoModel(TestCase):
         category_bd = Category.objects.get(name='Bodies')
         part = Part.objects.get(name='Telecaster')
         self.assertEqual(part.url, 'https://warmoth.com/guitar-bodies/telecaster', f"{FAILURE_HEADER}Tests on the Page model failed.{FAILURE_FOOTER}")
-        self.assertEqual(part.views, 4, f"{FAILURE_HEADER}Tests on the Page model failed.{FAILURE_FOOTER}")
-        self.assertEqual(part.likes, 3, f"{FAILURE_HEADER}Tests on the Page model failed.{FAILURE_FOOTER}")
-        self.assertEqual(part.sustain, 3.5, f"{FAILURE_HEADER}Tests on the Page model failed.{FAILURE_FOOTER}")
-        self.assertEqual(part.warmth, 2.5, f"{FAILURE_HEADER}Tests on the Page model failed.{FAILURE_FOOTER}")
-        self.assertEqual(part.weight, 2.5, f"{FAILURE_HEADER}Tests on the Page model failed.{FAILURE_FOOTER}")
-        self.assertEqual(part.category, category_bd, f"{FAILURE_HEADER}Tests on the Page model failed.{FAILURE_FOOTER}")
+        self.assertEqual(part.views, 4, f"{FAILURE_HEADER}Tests on the Part model failed.{FAILURE_FOOTER}")
+        self.assertEqual(part.likes, 3, f"{FAILURE_HEADER}Tests on the Part model failed.{FAILURE_FOOTER}")
+        self.assertEqual(part.sustain, 3.5, f"{FAILURE_HEADER}Tests on the Part model failed.{FAILURE_FOOTER}")
+        self.assertEqual(part.warmth, 2.5, f"{FAILURE_HEADER}Tests on the Part model failed.{FAILURE_FOOTER}")
+        self.assertEqual(part.weight, 2.5, f"{FAILURE_HEADER}Tests on the Part model failed.{FAILURE_FOOTER}")
+        self.assertEqual(part.category, category_bd, f"{FAILURE_HEADER}Tests on the Part model failed.{FAILURE_FOOTER}")
 
     def testStrMethod(self):
         # test to check correct __str__() method been implemented
@@ -100,15 +100,15 @@ class TestsTwoPopulationScript(TestCase):
     def setUp(self):
         # importing and running the population script, calling the populate() method
         try:
-            import popluate_guitar
+            import populate_guitar
         except ImportError:
             raise ImportError(f"{FAILURE_HEADER}populate_guitar could not be imported.{FAILURE_FOOTER}")
         
-        if 'populate' not in dir(popluate_guitar):
+        if 'populate' not in dir(populate_guitar):
             raise NameError(f"{FAILURE_HEADER}The populate() function does not exist in the populate_guitar module.{FAILURE_FOOTER}")
         
         # now calling the population script
-        popluate_guitar.populate()
+        populate_guitar.populate()
 
     def testCategories(self):
         # there should be four categories created: Bodies, Pick-Ups, Nuts, Bridges
@@ -129,7 +129,7 @@ class TestsTwoPopulationScript(TestCase):
         details = {'Bodies': ['single cut', 'double cut', 'contour', 'telecaster'],
             'Pick-Ups': ['humbucker', 'single coil', 'P90'],
             'Nuts': ['plastic', 'bone', 'tusq', 'brass'],
-            'Bridges': ['tune-o-matic', 'ashtray', 'hard tail', 'tremolo'],
+            'Bridges': ['tune-o-matic', 'ashtray', 'hardtail', 'tremolo'],
             }
         
         for category in details:
@@ -153,6 +153,3 @@ class TestsTwoPopulationScript(TestCase):
                 raise ValueError(f"{FAILURE_HEADER}The part '{name}' belonging to category '{category}' was not found in the database produced by populate_guitar.{FAILURE_FOOTER}")
             
             self.assertEqual(part.category, category)
-
-
-

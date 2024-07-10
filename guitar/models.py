@@ -28,9 +28,9 @@ class Part(models.Model):
     slug = models.SlugField(unique=True)
     views = models.IntegerField(default=0)
     likes = models.IntegerField(default=0)
-    sustain = models.IntegerField(default=0)
-    warmth = models.IntegerField(default=0)
-    weight = models.IntegerField(default=0)
+    sustain = models.FloatField(default=0)
+    warmth = models.FloatField(default=0)
+    weight = models.FloatField(default=0)
 
     def save(self, *args, **kwargs):
         self.slug = slugify(self.save)
