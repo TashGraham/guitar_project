@@ -1,5 +1,7 @@
 <!DOCTYPE html>
 
+{% load staticfiles %}
+
 <html>
 
     <head>
@@ -30,6 +32,8 @@
         </div>
         <div>
             <a href="/guitar/about/">About guitar</a>
+            <img src="{% static 'images/guitar.jpg' %}"
+                 alt="Picture of a guitar body" />
         </div>
     </body>
 </html>

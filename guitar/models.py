@@ -43,5 +43,9 @@ class Part(models.Model):
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
 
+    # additional attributes currently just an image 
+    # blank=True as picture is not necessary
+    picture = models.ImageField(upload_to='profile_images', blank=True)
+
     def __str__(self):
         return self.user.username

@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 from guitar.models import Category, Part
+from guitar.forms import UserForm, UserProfileForm
 
 def index(request):
     # getting a list of all the categories from the database
@@ -35,3 +36,41 @@ def show_category(request, category_name_slug):
         context_dict['parts'] = None
 
     return render(request, 'guitar/category.html', context=context_dict)
+
+
+def register(request):
+    registered = False
+
+    if request.method == 'POST':
+        user_form = UserForm(request.POST)
+        profile_form = UserProfileForm(request.POST)
+
+        if user_form.is_valid() and profile_form.is_valid():
+            # saving the user's form data to the database
+            user = user_form.save()
+            # now hashing the password 
+            user.set_password(user_form.cleaned_data['password'])
+            user.save()
+
+            profile = profile_form.save(commit=False)
+            profile.user = user
+            # if user hes provided a profile picture then we need to get it from the 
+            # input form and put it in the UserProfile model
+            if 'picture' in request.FILES:
+                profile.picture = request.FILES['picture']
+            # saving the UserProfile model instance
+            profile.save()
+            # registration successful
+            registered = True
+        else:
+            # printing problems to the terminal
+            print(user_form.errors, profile_form.errors)
+
+    else:
+        user_form = UserForm()
+        profile_form = UserProfileForm()
+
+    return render(request,'guitar/register.html',
+                  context = {'user_form': user_form,
+                            'profile_form': profile_form,
+                            'registered': registered})
