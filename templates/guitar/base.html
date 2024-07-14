@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+{% load staticfiles %}
+
+<html>
+    <head>
+        <title>
+            Guitar - 
+            {% block title_block %}
+            {% endblock %}
+        </title>
+    </head>
+    <body>
+        <div>
+            {% block body_block %}
+            {% endblock %}
+        </div>
+        <hr />
+        <div>
+            <ul>
+                <li><a href="{% url 'guitar:about' %}">About</a></li>
+                <li><a href="{% url 'guitar:index' %}">Homepage</a></li>
+                {% if not user.is_authenticated %}
+                <!-- These will only show if the user is not logged in -->
+                <li><a href="{% url 'guitar:register' %}">Sign Up</a></li>
+                <li><a href="{% url 'guitar:login' %}">Log in</a></li>
+                {% else %}
+                <!-- This will only show if the user is logged in -->
+                <li><a href="{% url 'guitar:logout' %}">Log out</a></li>
+                {% endif %}
+            </ul>
+        </div>
+    </body>
+</html>

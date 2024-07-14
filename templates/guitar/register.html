@@ -1,30 +1,26 @@
-<!DOCTYPE html>
-
+{% extends 'guitar/base.html' %}
 {% load staticfiles %}
 
-<html>
+{% block title_block %}
+    Register
+{% endblock %}
 
-    <title>Register</title>
+{% block body_block %}
+    <h1>Register for *guitar website name*</h1>
+    {% if registered %}
+    <strong>Thank you for registering!</strong>
+    {% else %}
+    <!-- only showing register forms if user not already registed -->
+    <strong>Register here!</strong><br />
+    <form id="user_form" method="post" action="{% url 'guitar:register' %}"
+            enctype="multipart/form-data">
+        {% csrf_token %}
+        <!-- as_p wraps each element in a paragraph -->
+        {{ user_form.as_p }} 
+        {{ profile_form.as_p }}
 
-    <body>
-        <h1>Register for *guitar website name*</h1>
-        {% if registered %}
-        <strong>Thank you for registering!</strong>
-        <a href="{% url 'guitar:index' %}">Return to homepage.</a>
-        {% else %}
-        <!-- only showing register forms if user not already registed -->
-        <strong>Register here!</strong><br />
-        <form id="user_form" method="post" action="{% url 'guitar:register' %}"
-              enctype="multipart/form-data">
-            {% csrf_token %}
-            <!-- as_p wraps each element in a paragraph -->
-            {{ user_form.as_p }} 
-            {{ profile_form.as_p }}
-
-            <!-- button to click to submit form -->
-            <input type="submit" name="submit" value="Register" />
-        </form>
-        {% endif %}
-    </body>
-
-</html>
+        <!-- button to click to submit form -->
+        <input type="submit" name="submit" value="Register" />
+    </form>
+    {% endif %}
+{% endblock %}

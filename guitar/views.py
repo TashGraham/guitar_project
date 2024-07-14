@@ -1,6 +1,10 @@
 from django.shortcuts import render
 from django.http import HttpResponse
-from guitar.models import Category, Part
+from django.contrib.auth import authenticate, logout, login as auth_login
+from django.contrib.auth.decorators import login_required
+from django.urls import reverse
+from django.shortcuts import redirect
+from guitar.models import Category, Part, User
 from guitar.forms import UserForm, UserProfileForm
 
 def index(request):
@@ -74,3 +78,39 @@ def register(request):
                   context = {'user_form': user_form,
                             'profile_form': profile_form,
                             'registered': registered})
+
+
+def login(request):
+    context_dict = {'error_message': None}
+    # if request is an HTTP POST, try to pull relevant info
+    if request.method == 'POST':
+        # get username and password provided by user
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        # if username/password combination is valid then a user object is returned
+        user = authenticate(username=username, password=password)
+        # if we have a user then the credentials were correct
+        if user:
+            # now checking if the account is active
+            if user.is_active:
+                # user can now be logged in and returned to homepage
+                auth_login(request, user)
+                return redirect(reverse('guitar:index'))
+            else:
+                # if account is inactive then no logging in
+                return HttpResponse("Your account is disabled")
+        else:
+            # invalid credentials - no logging in
+            # checking which part is invalid for error message
+            if User.objects.filter(username=username).exists():
+                context_dict['error_message'] = 'Your password is incorrect.'
+            else:
+                context_dict['error_message'] = 'Your username is incorrect.'
+
+    # if user has not been logged in successfully then return them to login page
+    return render(request, 'guitar/login.html', context_dict)
+
+@login_required
+def user_logout(request):
+    logout(request)
+    return redirect(reverse('guitar:index'))

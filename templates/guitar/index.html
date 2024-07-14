@@ -1,39 +1,35 @@
-<!DOCTYPE html>
-
+{% extends 'guitar/base.html' %}
 {% load staticfiles %}
 
-<html>
+{% block title_block %}
+    Homepage
+{% endblock %}
 
-    <head>
-        <title>Guitars!!</title>
-    </head>
-
-    <body>
-        <h1>This is the index page</h1>
-        <div>
-        {% if categories %}
-            <ul>
-            {% for category in categories %}
-                <a href="{% url 'guitar:show_category' category.slug %}">
-                    {{ category.name }}
-                </a>
-                <strong>Parts in {{ category.name }}:</strong>
-                {% for part in parts %}
-                    {% if part.category == category %}
-                        <li>{{ part.name }}</li>
-                    {% endif %}
-                {% endfor %}
-            <br>
+{% block body_block %}
+    <h1>This is the index page</h1>
+    <div>
+    {% if categories %}
+        <ul>
+        {% for category in categories %}
+            <a href="{% url 'guitar:show_category' category.slug %}">
+                {{ category.name }}
+            </a>
+            <strong>Parts in {{ category.name }}:</strong>
+            {% for part in parts %}
+                {% if part.category == category %}
+                    <li>{{ part.name }}</li>
+                {% endif %}
             {% endfor %}
-            </ul>
-        {% else %}
-            <strong>There are no categories present.</strong>
-        {% endif %}
-        </div>
-        <div>
-            <a href="/guitar/about/">About guitar</a>
-            <img src="{% static 'images/guitar.jpg' %}"
-                 alt="Picture of a guitar body" />
-        </div>
-    </body>
-</html>
+        <br>
+        {% endfor %}
+        </ul>
+    {% else %}
+        <strong>There are no categories present.</strong>
+    {% endif %}
+    </div>
+    <div>
+        <img src="{% static 'images/guitar.jpg' %}"
+                alt="Picture of a guitar body"
+                width="200" height="150" />
+    </div>
+{% endblock %}
