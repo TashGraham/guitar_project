@@ -33,7 +33,7 @@ class Part(models.Model):
     weight = models.FloatField(default=0)
 
     def save(self, *args, **kwargs):
-        self.slug = slugify(self.save)
+        self.slug = slugify(self.name)
         super(Part, self).save(*args, **kwargs)
     
     def __str__(self):

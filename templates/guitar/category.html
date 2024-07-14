@@ -15,7 +15,9 @@
     {% if parts %}
     <ul>
         {% for part in parts %}
-        <li>{{ part.name }}</li>
+            {% if part.category == category %}
+                <li><a href="{% url 'guitar:show_part' category.slug part.slug %}">{{ part.name }}</a></li>
+            {% endif %}
         {% endfor %}
     </ul>
     {% else %}

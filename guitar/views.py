@@ -42,6 +42,20 @@ def show_category(request, category_name_slug):
     return render(request, 'guitar/category.html', context=context_dict)
 
 
+def show_part(request, category_name_slug, part_name_slug):
+    context_dict = {}
+
+    # trying to get the category and part objects
+    try:
+        category = Category.objects.get(slug=category_name_slug)
+        part = Part.objects.get(slug = part_name_slug)
+        context_dict['category'] = category
+        context_dict['part'] = part
+    except (Category.DoesNotExist, Part.DoesNotExist):
+        context_dict['category'] = None
+        context_dict['part'] = None
+    return render(request, 'guitar/part.html', context=context_dict)
+
 def register(request):
     registered = False
 

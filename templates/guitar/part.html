@@ -1,0 +1,26 @@
+{% extends 'guitar/base.html' %}
+{% load staticfiles %}
+
+{% block title_block %}
+    {% if part %}
+        {{ part.name }}
+    {% else %}
+        Unknown Part
+    {% endif %}
+{% endblock %}
+
+{% block body_block %}
+    {% if part %}
+        <h1>Part name: {{ part.name }}</h1>
+    {% else %}
+        The specified part does not exist.
+    {% endif %}
+    {% if category %}
+        <h2>From {{ category.name }}</h2> 
+    {% else %}
+        The specified category does not exist.
+    {% endif %}
+    Warmth: {{ part.warmth }} <br />
+    Sustain: {{ part.sustain }} <br />
+    Weight: {{ part.weight }} <br />
+{% endblock %}
