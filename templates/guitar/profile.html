@@ -1,0 +1,24 @@
+{% extends 'guitar/base.html' %}
+{% load staticfiles %}
+
+{% block title_block %}
+    Profile page
+{% endblock %}
+
+{% block body_block %} 
+<h1 class="headingLogin">Hello {{ user.username }}!</h1>
+<body class="login">
+    {% if user %}
+    <p>Username: {{ user.username }}</p>
+    <p>Email: {{ user.email }}</p>
+    {% if user_profile.picture %}
+    <p>Your profile picture: {{ user_profile.picture.url }}</p>
+
+    <img src="{{ user_profile.picture.url }}" alt="{{ user.username}}'s Profile Picture"
+         style="max-width: 300px; max-height: 300px;">
+    {% endif %}
+    {% else %}
+    <p>Profile details not available.</p>
+    {% endif %}
+</body>
+{% endblock %}

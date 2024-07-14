@@ -4,7 +4,7 @@ from django.contrib.auth import authenticate, logout, login as auth_login
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse
 from django.shortcuts import redirect
-from guitar.models import Category, Part, User
+from guitar.models import Category, Part, User, UserProfile
 from guitar.forms import UserForm, UserProfileForm
 
 def index(request):
@@ -123,6 +123,18 @@ def login(request):
 
     # if user has not been logged in successfully then return them to login page
     return render(request, 'guitar/login.html', context_dict)
+
+@login_required
+def profile(request):
+    try:
+        user_profile = UserProfile.objects.get(user=request.user)
+    except UserProfile.DoesNotExist:
+        user_profile = None
+    context_dict = {
+        'user': request.user,
+        'user_profile': user_profile
+    }
+    return render(request, 'guitar/profile.html', context_dict)
 
 @login_required
 def user_logout(request):

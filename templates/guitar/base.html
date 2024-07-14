@@ -26,6 +26,7 @@
                 {% else %}
                 <!-- This will only show if the user is logged in -->
                 <li><a href="{% url 'guitar:logout' %}">Log out</a></li>
+                <li><a href="{% url 'guitar:profile' %}">Profile</a></li>
                 {% endif %}
             </ul>
         </div>
