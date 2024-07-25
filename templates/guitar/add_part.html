@@ -1,0 +1,33 @@
+{% extends 'guitar/base.html' %}
+{% load staticfiles %}
+
+{% block title_block %}
+Add a part
+{% endblock %}
+
+{% block body_block %}
+<div class="add-part">
+    <h1 class="add-part-heading">Add your part!</h1>
+    <div class="centered-form">
+        <form id="add_part_form" method="post" action="/guitar/{{ category.slug }}/add_part/">
+            {% csrf_token %}
+            {% for hidden in form.hidden_fields %}
+                {{ hidden }}
+            {% endfor %}
+            {% for field in form.visible_fields %}
+            <div class="form-group">
+                {{ field.errors }}
+                {{ field.help_text }}
+                {{ field }}
+            </div>
+            {% endfor %}
+            <input type="submit" name="submit" value="Create Part" class="submitButton" />
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+<!-- stratocaster
+    warmth = 4
+    sustain = 4
+    weight = 3.5-->

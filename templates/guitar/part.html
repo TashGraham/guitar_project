@@ -23,8 +23,8 @@
     Warmth: {{ part.warmth }} <br />
     Sustain: {{ part.sustain }} <br />
     Weight: {{ part.weight }} <br />
-    {{ part.pic.url }} <br />
-
-    <img src="{% static '/media/part_images/humbucker.jpg' %}" alt="Pic of {{ part.name }}"
-         style="max-width: 300px; max-height: 300px;">
+    {% if part.pic %}
+    <!-- {{ part.pic.url }} <br /> -->
+    <img src="{{ MEDIA_URL }}{{ part.pic.url }}" alt="Pic of {{ part.name }}" />
+    {% endif %}
 {% endblock %}

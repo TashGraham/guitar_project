@@ -23,6 +23,7 @@
     {% else %}
     <strong>No pages currently in category.</strong>
     {% endif %}
+    <a href="{% url 'guitar:add_part' category.slug %}">Know a new one? Add your part here!</a>
     {% else %}
     The specified category does not exist.
     {% endif %}

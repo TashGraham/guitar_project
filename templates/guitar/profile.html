@@ -14,8 +14,7 @@
     {% if user_profile.picture %}
     <p>Your profile picture: {{ user_profile.picture.url }}</p>
 
-    <img src="{{ user_profile.picture.url }}" alt="{{ user.username}}'s Profile Picture"
-         style="max-width: 300px; max-height: 300px;">
+    <img src="{{ user_profile.picture.url }}" alt="{{ user.username}}'s Profile Picture" />
     {% endif %}
     {% else %}
     <p>Profile details not available.</p>

@@ -1,11 +1,10 @@
-from django.shortcuts import render
+from django.shortcuts import get_object_or_404, render, redirect
 from django.http import HttpResponse
 from django.contrib.auth import authenticate, logout, login as auth_login
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse
-from django.shortcuts import redirect
 from guitar.models import Category, Part, User, UserProfile
-from guitar.forms import UserForm, UserProfileForm
+from guitar.forms import UserForm, UserProfileForm, PartForm
 
 def index(request):
     # getting a list of all the categories from the database
@@ -55,6 +54,36 @@ def show_part(request, category_name_slug, part_name_slug):
         context_dict['category'] = None
         context_dict['part'] = None
     return render(request, 'guitar/part.html', context=context_dict)
+
+@login_required #unregistered people cannot add a part
+def add_part(request, category_name_slug):
+    # finding category 
+    category = get_object_or_404(Category, slug=category_name_slug)
+
+    # if category not found then cannot add part
+    if category is None:
+        return redirect('/guitar/')
+    
+    form = PartForm()
+
+    # chekcing the type of request
+    if request.method == 'POST':
+        form = PartForm(request.POST)
+
+        # checking if form is valid
+        if form.is_valid():
+            if category:
+                # if part and category are valid then saving
+                part = form.save(commit=False)
+                part.category = category
+                part.save()
+                return redirect(reverse('guitar:show_category',
+                                        kwargs={'category_name_slug':category_name_slug}))
+        else:
+            # if form had errors then printing those errors
+            print(form.errors)
+    context_dict = {'form': form, 'category':category}
+    return render(request, 'guitar/add_part.html', context=context_dict)
 
 def register(request):
     registered = False

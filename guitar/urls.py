@@ -14,5 +14,6 @@ urlpatterns = [
     path('logout/', LogoutView.as_view(next_page='index'), name='logout'),
     path('profile/', views.profile, name='profile'),
     path('<slug:category_name_slug>/', views.show_category, name='show_category'),
+    path('<slug:category_name_slug>/add_part/', views.add_part, name='add_part'),
     path('<slug:category_name_slug>/<slug:part_name_slug>/', views.show_part, name='show_part'),
-] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+]
