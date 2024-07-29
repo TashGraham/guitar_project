@@ -1,3 +1,4 @@
+from datetime import datetime
 from django.shortcuts import get_object_or_404, render, redirect
 from django.http import HttpResponse
 from django.contrib.auth import authenticate, logout, login as auth_login
@@ -14,14 +15,18 @@ def index(request):
     context_dict = {}
     context_dict['categories'] = category_list
     context_dict['parts'] = part_list
-    # rendering the response
-    return render(request, 'guitar/index.html', context=context_dict)
+    # rendering the response early so can add cookie info
+    response = render(request, 'guitar/index.html', context=context_dict)
+    visitor_cookie_handler(request)
+    return response
 
 def about(request):
+    visitor_cookie_handler(request)
     # about page contains link back to index
     return HttpResponse("This is the about page. To return to index page please click <a href='/guitar/'>here</a>")
 
 def show_category(request, category_name_slug):
+    visitor_cookie_handler(request)
     # context dict to pass to the template rendering engine
     context_dict = {}
 
@@ -42,6 +47,7 @@ def show_category(request, category_name_slug):
 
 
 def show_part(request, category_name_slug, part_name_slug):
+    visitor_cookie_handler(request)
     context_dict = {}
 
     # trying to get the category and part objects
@@ -57,6 +63,7 @@ def show_part(request, category_name_slug, part_name_slug):
 
 @login_required #unregistered people cannot add a part
 def add_part(request, category_name_slug):
+    visitor_cookie_handler(request)
     # finding category 
     category = get_object_or_404(Category, slug=category_name_slug)
 
@@ -86,6 +93,7 @@ def add_part(request, category_name_slug):
     return render(request, 'guitar/add_part.html', context=context_dict)
 
 def register(request):
+    visitor_cookie_handler(request)
     registered = False
 
     if request.method == 'POST':
@@ -124,6 +132,7 @@ def register(request):
 
 
 def login(request):
+    visitor_cookie_handler(request)
     context_dict = {'error_message': None}
     # if request is an HTTP POST, try to pull relevant info
     if request.method == 'POST':
@@ -155,6 +164,7 @@ def login(request):
 
 @login_required
 def profile(request):
+    visitor_cookie_handler(request)
     try:
         user_profile = UserProfile.objects.get(user=request.user)
     except UserProfile.DoesNotExist:
@@ -167,5 +177,33 @@ def profile(request):
 
 @login_required
 def user_logout(request):
+    visitor_cookie_handler(request)
     logout(request)
     return redirect(reverse('guitar:index'))
+
+# helper function
+def get_server_side_cookie(request, cookie, default_val=None):
+    val = request.session.get(cookie)
+    if not val:
+        val = default_val
+    return val
+
+# cookie helper function
+def visitor_cookie_handler(request):
+    # getting number of visits to site
+    # is the cookie doesn't exist then the default (1) is used
+    visits = int(request.COOKIES.get('visits', '1'))
+
+    last_visit_cookie = get_server_side_cookie(request, 'last_visit', str(datetime.now()))
+    last_visit_time = datetime.strptime(last_visit_cookie[:-7], '%Y-%m-%d %H:%M:%S')
+
+    # if it's been more than one day since last visit
+    if (datetime.now() - last_visit_time).days > 0:
+        visits = visits + 1
+        # update last visit cookie now that count has been updated
+        request.session['last_visit'] = str(datetime.now())
+    else:
+        # set the last visit cookie
+        request.session['last_visit'] = last_visit_cookie
+    # updating the visits cookie
+    request.session['visits'] = visits
