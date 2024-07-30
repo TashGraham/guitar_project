@@ -5,7 +5,7 @@ from django.contrib.auth import authenticate, logout, login as auth_login
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse
 from guitar.models import Category, Part, User, UserProfile
-from guitar.forms import UserForm, UserProfileForm, PartForm
+from guitar.forms import UserForm, UserProfileForm, PartForm, ReviewForm
 
 def index(request):
     # getting a list of all the categories from the database
@@ -59,6 +59,29 @@ def show_part(request, category_name_slug, part_name_slug):
     except (Category.DoesNotExist, Part.DoesNotExist):
         context_dict['category'] = None
         context_dict['part'] = None
+    return render(request, 'guitar/part.html', context=context_dict)
+
+# write review will also be displayed on part.html 
+def write_review(request, category_name_slug, part_name_slug):
+    visitor_cookie_handler(request)
+    context_dict = {}
+
+    category = get_object_or_404(Category, slug=category_name_slug)
+    part = get_object_or_404(Part, slug=part_name_slug)
+
+    context_dict['category'] = category
+    context_dict['part'] = part
+
+    form = ReviewForm()
+    if request.method == 'POST':
+        form = ReviewForm(request.POST)
+        if form.is_valid():
+            review = form.save(commit=False)
+            review.part = part
+            review.save()
+    else:
+        print(form.errors)
+    context_dict['form'] = form
     return render(request, 'guitar/part.html', context=context_dict)
 
 @login_required #unregistered people cannot add a part

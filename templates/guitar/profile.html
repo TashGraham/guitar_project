@@ -12,9 +12,9 @@
     <p>Username: {{ user.username }}</p>
     <p>Email: {{ user.email }}</p>
     {% if user_profile.picture %}
-    <p>Your profile picture: {{ user_profile.picture.url }}</p>
-
-    <img src="{{ user_profile.picture.url }}" alt="{{ user.username}}'s Profile Picture" />
+    <img src="{{ user_profile.picture.url }}" 
+            alt="{{ user.username}}'s Profile Picture"
+            width="200" />
     {% endif %}
     {% else %}
     <p>Profile details not available.</p>

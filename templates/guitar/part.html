@@ -24,7 +24,35 @@
     Sustain: {{ part.sustain }} <br />
     Weight: {{ part.weight }} <br />
     {% if part.pic %}
-    <!-- {{ part.pic.url }} <br /> -->
+    {{ part.pic.url }} <br />
+    <img src="/media/part_images/humbucker.jpg" alt="Pic of {{ part.name }}" />
     <img src="{{ MEDIA_URL }}{{ part.pic.url }}" alt="Pic of {{ part.name }}" />
+
+    <body class="review_display">
+        {% for review in reviews %}
+            {{ review.title }}
+        {% endfor %}
+    </body>
+
+    <body class="review_form">
+        Add a review here!
+        <form id="write_review_form" method="post" action="/guitar/{{ category.slug }}/{{ part.slug }}/">
+            {% csrf_token %}
+            {% for hidden in form.hidden_fields %}
+                {{ hidden }}
+            {% endfor %}
+            {% for field in form.visible_fields %}
+            <div class="form-group">
+                {{ field.errors }}
+                {{ field.help_text }}
+                {{ field }}
+            </div>
+            {% endfor %}
+            <input type="submit" name="submit" value="Post Review" class="submitButton" />
+        </form>
+    </body>
+
     {% endif %}
+
+    
 {% endblock %}

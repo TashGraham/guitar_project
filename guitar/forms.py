@@ -1,6 +1,6 @@
 from django import forms
 from django.contrib.auth.models import User
-from guitar.models import UserProfile, Category, Part
+from guitar.models import UserProfile, Category, Part, Review
 
 class PartForm(forms.ModelForm):
     name = forms.CharField(max_length=128,
@@ -24,7 +24,21 @@ class PartForm(forms.ModelForm):
 
     class Meta:
         model = Part
-        fields = ('name', 'sustain', 'warmth', 'weight', )
+        fields = ('name', 'sustain', 'warmth', 'weight', 'pic', )
+
+class ReviewForm(forms.ModelForm):
+    title = forms.CharField(max_length=40,
+                            help_text="Title: ")
+    content = forms.CharField(max_length=128,
+                              help_text="Content of review: ")
+    rating = forms.FloatField(initial=0,
+                              max_value=5,
+                              min_value=0,
+                              help_text="Rating: ")
+    class Meta:
+        model = Review
+        fields = ('title', 'content', 'rating', )
+
 
 
 class UserForm(forms.ModelForm):

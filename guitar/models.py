@@ -39,6 +39,19 @@ class Part(models.Model):
     def __str__(self):
         return self.name
     
+class Review(models.Model):
+    part = models.ForeignKey(Part, on_delete=models.CASCADE)
+    username = models.CharField(max_length=30, default='anonymous')
+    title = models.CharField(max_length=40)
+    content = models.CharField(max_length=128)
+    rating = models.FloatField(default=0)
+
+    def save(self, *args, **kwargs):
+        super(Review, self).save(*args, **kwargs)
+    
+    def __str__(self):
+        return self.title
+    
 
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
